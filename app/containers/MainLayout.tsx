@@ -5,12 +5,10 @@ const { Header, Content } = Layout;
 type MainLayoutProps = { header : JSX.Element, content : JSX.Element }
 export const MainLayout: React.FC<MainLayoutProps> = ({header, content}): JSX.Element => {
   return (
-    <div id="app-wrapper">
-      <Layout>
+      <Layout id="app-wrapper">
         <Header>{header}</Header>
         <Content>{content}</Content>
       </Layout>
-    </div>
   )
 };
 export default MainLayout

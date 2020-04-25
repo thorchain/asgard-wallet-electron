@@ -1,8 +1,9 @@
-import React, { useEffect, useMemo } from 'react'
+import React, { useEffect, useMemo } from 'react';
 // import { FlowRouter } from 'meteor/kadira:flow-router'
 // import { Session } from 'meteor/session'
 
-import logoImg from '../assets/img/Asgard-Tri-Gradient.svg'
+import logoImg from '../../assets/img/Asgard-Tri-Gradient.svg';
+// import logoImg from '../assets/img/Asgard-Tri-Gradient.svg'
 
 import { Row, Col, Button, Typography, Tabs } from 'antd'
 import { withRouter, Link } from 'react-router-dom'
@@ -48,7 +49,7 @@ const StartScreen: React.FC = (props:any): JSX.Element => {
 
             <Button type="primary" size={'large'} className={'ant-btn-brand'} block onClick={() => goto('/create')}> New </Button>
             <Button type="primary" size={'large'} block onClick={() => goto('/import')}>Import</Button>
-            <Link to="/connect">
+            <Link to="/wallet-connect">
               <Button type="primary" size="large" block>Connect</Button>
             </Link>
 

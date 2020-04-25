@@ -17,7 +17,7 @@ const userRecord = {
     locked: false
 }
 type ClientTypes = {network: string, chainId: string}
-const UserAccountScreen: React.FC = (): JSX.Element => {
+const UserAccountsScreen: React.FC = (): JSX.Element => {
   // TODO: Make reactive when we handle connection errors
   const client: ClientTypes = useMemo(() => {
     let obj
@@ -110,4 +110,4 @@ const UserAccountScreen: React.FC = (): JSX.Element => {
   )
 }
 
-export default UserAccountScreen
+export default UserAccountsScreen

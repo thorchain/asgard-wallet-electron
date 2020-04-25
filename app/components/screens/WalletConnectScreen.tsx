@@ -10,7 +10,7 @@ const { Title } = Typography
 import { CheckSquareOutlined, MinusSquareOutlined } from '@ant-design/icons'
 const { Meta } = Card
 
-const ConnectScreen = (props:any) => {
+const WalletConnectScreen = (props:any) => {
   const [connecting, setConnecting] = useState(false);
   const [ledgerIndex, setLedgerIndex] = useState(0);
   const [isConnected, setIsConnected] = useState(false)
@@ -157,4 +157,4 @@ const ConnectScreen = (props:any) => {
   </>);
 };
 
-export default ConnectScreen
+export default WalletConnectScreen

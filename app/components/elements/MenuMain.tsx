@@ -33,10 +33,8 @@ const NavMenuMain: React.FC = (): JSX.Element => {
       ]}
     >
       <Link to="/">
-      {/* <a href={FlowRouter.path('home')} key="0"> */}
         <img src={logoImg} className="float-left mr-2" width="28" height="28" alt="" />
         <strong className="font-brand text-uppercase">Asgard</strong><small className='text-color-secondary'>&nbsp;BETA</small>
-      {/* </a> */}
       </Link>
     </NavBar>
     <Drawer
@@ -68,29 +66,32 @@ const TopMenu: React.FC<{handler:()=>void}> = ({handler}): JSX.Element => {
       selectedKeys={selected}
       theme="dark"
     >
-      <Menu.Item key="walletAssets">
+      <Menu.Item key="walletCreate">
+        <Link to="/wallet-create">Create</Link>
+      </Menu.Item>
+      <Menu.Item key="walletImport">
+        <Link to="/wallet-import">Import</Link>
+      </Menu.Item>
+      <Menu.Item key="walletConnect">
+        <Link to="/wallet-connect">Connect</Link>
+      </Menu.Item>
+      <Menu.Item key="userAssets">
         <Link to="/user-assets">Assets</Link>
-        {/* <a href="" onClick={() => FlowRouter.go('walletAssets')}>Assets</a> */}
       </Menu.Item>
       <Menu.Item key="walletTransactionsList">
-        <Link to="/user-assets">Assets</Link>
-        {/* <a href="" onClick={() => FlowRouter.go('walletTransactionsList')}>Transactions</a> */}
+        <Link to="/user-transactions">Transactions</Link>
       </Menu.Item>
       <Menu.Item key="walletSend">
-        <Link to="/user-assets">Assets</Link>
-        {/* <a href="" onClick={() => FlowRouter.go('walletSend')}>Send Funds</a> */}
+        <Link to="/send-funds">Send</Link>
       </Menu.Item>
       <Menu.Item key="walletReceive">
-        <Link to="/user-assets">Assets</Link>
-        {/* <a href="" onClick={() => FlowRouter.go('walletReceive')}>Receive Funds</a> */}
+        <Link to="/receive-funds">Receive</Link>
       </Menu.Item>
       <Menu.Item key="walletAccounts">
-        <Link to="/user-assets">Assets</Link>
-        {/* <a href="" onClick={() => FlowRouter.go('walletAccounts')}>Accounts</a> */}
+        <Link to="/user-accounts">Accounts</Link>
       </Menu.Item>
       <Menu.Item>
-        <Link to="/user-assets">Assets</Link>
-        {/* <a href="" onClick={lockWallet}>Lock</a> */}
+        <Link to="/">Lock</Link>
       </Menu.Item>
     </Menu>
   )

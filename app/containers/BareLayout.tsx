@@ -1,15 +1,13 @@
 import React from 'react';
 import { Layout } from 'antd'
-const { Header, Footer, Sider, Content } = Layout;
+const { Content } = Layout;
 
 type BareLayoutProps = { content : any}
 const BareLayout: React.FC<BareLayoutProps> = ({content}) => {
   return (
-    <div id="app-wrapper">
-      <Layout>
-        <Content>{content}</Content>
-      </Layout>
-    </div>
+    <Layout id="app-wrapper">
+      <Content>{content}</Content>
+    </Layout>
   )
 }
 export default BareLayout
