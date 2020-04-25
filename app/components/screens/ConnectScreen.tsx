@@ -1,7 +1,7 @@
 import TransportNodeHid from "@ledgerhq/hw-transport-node-hid"
 import { ledger, crypto } from '@binance-chain/javascript-sdk';
 // import { WALLET } from '../../index'
-import Binance from '../binance'
+// import Binance from '../binance'
 
 import React, { useState, useMemo } from 'react';
 import { useHistory } from 'react-router-dom'
@@ -19,7 +19,7 @@ const ConnectScreen = (props:any) => {
   let history = useHistory();
 
   console.log('have wallet?')
-  console.log(Binance)
+  // console.log(Binance)
 
   const ledgerConnect = async () => {
     console.log('trying to connect ledger')
