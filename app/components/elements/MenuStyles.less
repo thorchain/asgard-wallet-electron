@@ -1,0 +1,94 @@
+@import '../../styles/_antd_custom.less';
+
+.ant-drawer-body{
+  padding: 0;
+}
+.ant-drawer-body .ant-menu-horizontal > .ant-menu-item, .ant-drawer-body .ant-menu-horizontal > .ant-menu-submenu{
+  display: inline-block;
+  width: 100%;
+}
+.ant-drawer-body .ant-menu-horizontal{
+  border-bottom: none;
+}
+.ant-drawer-body .ant-menu-horizontal > .ant-menu-item:hover{
+  border-bottom-color: transparent;
+}
+
+.ant-menu-vertical { border: none; }
+.my-drawer {
+  position: absolute;
+  top: 54px;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.my-drawer .am-drawer-sidebar {
+  background-color: #fff;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.my-drawer .am-drawer-sidebar .am-list {
+  width: 300px;
+  padding: 0;
+}
+
+.am-navbar.am-navbar-mobile {
+  z-index: 1010;
+}
+
+.my-drawer > .am-drawer-sidebar {
+  overflow: visible;
+  &::after {
+    content: "";
+    display: block;
+    position: absolute;
+    width: 100%;
+    bottom: -2px;
+    left: 0px;
+    height: 2px;
+    background-image: linear-gradient(to right, @Asgard-Green, @Accent-Blue);
+  }
+  .ant-menu {
+    &.ant-menu-dark {
+      background: @Primary-Gray !important;
+      li.ant-menu-item {
+        color: @White-Gray !important;
+      }
+      li.ant-menu-item-selected {
+        // background-color: @Darker-Gray !important;
+        background: @Dark-Gray !important;
+        // color: @Light-Gray !important;
+        > a { color: @Light-Gray !important; }
+      }
+    }
+    li.ant-menu-item {
+      text-align: right;
+      margin-top:0;
+      margin-bottom:0;
+    }
+    li.ant-menu-item-selected {
+      pointer-events: none;
+      cursor: default;
+    }
+
+  }
+}
+.ant-menu-vertical .ant-menu-item {
+  font-size: @font-size-lg;
+}
+.am-navbar {
+  position: fixed;
+  width: 100%;
+  z-index: 1;
+  height: unset !important;
+  .am-navbar-right {
+    .ant-btn {
+      width: unset;
+      margin: 0;
+      border-color: transparent;
+      >.anticon {
+        font-size: @font-size-lg;
+        vertical-align: text-bottom;
+      }
+    }
+  }
+}

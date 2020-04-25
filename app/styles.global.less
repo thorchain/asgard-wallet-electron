@@ -1,0 +1,265 @@
+@import './styles/styles.less';
+
+
+@letter-spacing-base: .1rem;
+@headings-letter-spacing: @letter-spacing-base * 1.3;
+@text-letter-spacing: @letter-spacing-base * .7;
+
+html, body {
+  height: 100%;
+  letter-spacing: @text-letter-spacing;
+  overflow: hidden;
+}
+body > #app {
+  height: 100%;
+}
+body > #__blaze-root, body > #__react-root, body > #root {
+  height: 100%;
+}
+
+#app-wrapper {
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  .bg-img-brand {
+  background-image: url("/img/Asgard-Swirl.png");
+  background-attachment: fixed;
+	background-size: auto;
+	background-position: right top;
+	background-repeat: no-repeat;
+  }
+}
+
+h1, h2, h3, h4 ,h5 {
+  letter-spacing: @headings-letter-spacing;
+}
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: @gray-9;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: @gray-6;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: @gray-4;
+}
+
+
+
+a, button, [class^=".btn"] {
+  cursor: pointer;
+}
+
+ul.list-links > li:hover {
+  background-color: @Primary-Gray;
+}
+
+
+// Bootstrap & Theme Customization:
+// Overrides and custom styles for bootstrap components etc.
+// .navbar {
+//   background-color: @Dark-Gray;
+//   > .navbar-brand {
+//     font-family: Exo2;
+//   }
+//   > .navbar-border {
+//     display: block;
+//     width: 100%;
+//     margin-left: -15px; // correction for padding
+//     height: 1px;
+//     bottom: -1px;
+//   }
+//   > .navbar-toggler {
+//     border: 1px solid transparent !important;
+//     opacity: .8;
+//   }
+// }
+
+// Breadcrumb
+// .breadcrumb {
+//   z-index: 900;
+//   background: none;
+//   margin-bottom: -20px;
+//   >.breadcrumb-item {
+//     color: $Accent-Green;
+//     font-family: Exo2;
+//   }
+// }
+
+
+// Buttons
+.btn {
+  text-transform: uppercase;
+  letter-spacing: @text-letter-spacing;
+  &.disabled, &[disabled], &[disabled="disabled"] {
+    cursor: default;
+  }
+}
+.btn-text {
+  color: @Accent-Green;
+  font-family: OpenSans;
+  font-weight: 400;
+}
+.btn-dark {
+  background-color: darken(@gray-8, 3%);
+}
+
+.btn-primary {
+  border-color: @Middle-Gray;
+}
+
+// Cards
+.card:not([class^='bg-']) {
+  background-color: transparent;
+}
+
+// Nav-tabs
+.nav.nav-tabs {
+  border-bottom: none;
+  > .nav-item { 
+    border: none;
+    // Use links for styling because they get 'active' class
+    // Clear border styles
+    > .nav-link, .nav-link:hover, .nav-link.active, .nav-link.active:hover {
+      font-weight: 700;
+      border: none;
+      border-bottom: 2px solid transparent;
+    }
+    // New styles
+    > .nav-link {
+      color: @gray-5;
+      text-transform: uppercase;
+      border-bottom: 1px solid @gray-5;
+      margin-bottom: 1px;
+      &:hover {
+        color: @gray-2;
+        border-bottom: 1px solid @gray-5;
+        margin-bottom: 1px;
+      }
+      &.active {
+        color: @Accent-Green;
+        border-bottom: 2px solid @Accent-Green !important;
+        // & :hover {
+        //   border-bottom: 2px solid $Accent-Green;
+        // }
+      }
+    }
+  }
+}
+
+
+// Forms
+.form-text { 
+  position: absolute;
+  margin-top: -12px;
+}
+
+// Tables 
+.table-sm th, .table-sm td {
+  font-size: @font-size-base * .8;
+  letter-spacing: @text-letter-spacing * .8;
+}
+
+
+// Typography, Fonts, & Text
+// .font-size-h1 { font-size: @h1-font-size; }
+// .font-size-h2 { font-size: @h2-font-size; }
+// .font-size-h3 { font-size: @h3-font-size; }
+// .font-size-h4 { font-size: @h4-font-size; }
+// .font-size-h5 { font-size: @h5-font-size; }
+// .font-size-h6 { font-size: @h6-font-size; }
+
+// Custom General Utilities
+
+:global(.hr) {
+  border-bottom: 1px solid @Light-Gray;
+  height: 0;
+  margin: 0 -15px 0 -15px; // account for container margin
+}
+.col-m-correct {
+  margin-left: @grid-gutter-width / 2 * -1;
+}
+
+
+
+// Custom Styles
+
+// Custom background
+
+// This can be use INSIDE button (.btn) content
+// overlay button needs to be smaller
+.btn-overlay {
+  // position: absolute;
+  margin-top: -3px;
+  margin-right: -8px;
+  // right: 18px;
+}
+
+.badge.disabled {
+  // opacity: @btn-disabled-opacity;
+  cursor: pointer;
+  pointer-events: none;
+}
+
+
+
+// Custom style components
+
+// Swirling Background graphic
+@swirl-width: 2020px;
+.bg-brand-swirl {
+  width: @swirl-width;
+  position: fixed;
+  top: @swirl-width * -0.57;
+  right: @swirl-width * -0.60;
+  &[class^='spin-'] {
+    position: absolute;
+  }
+}
+
+.spin-cw { animation: spin 18s linear infinite; }
+.spin-acw { animation: spin-anti 24s linear infinite; }
+@keyframes spin { from {transform:rotate(0deg);} to {transform:rotate(360deg);} }
+@keyframes spin-anti { from {transform:rotate(360deg);} to {transform:rotate(0deg);} }
+
+// Gradient border effect
+// When using this, place button text inside inner <span>
+@brand-gradient: linear-gradient(to right, @Asgard-Green, @Accent-Blue);
+.bg-brand-gradient {
+  background-image: @brand-gradient;
+}
+.btn-brand-border {
+  position: relative;
+  padding: @btn-border-width; // this creates the pseudo border
+  // background-image: linear-gradient(to right, $Asgard-Green, $Accent-Blue);
+  // background-image: $brand-gradient;
+  &:extend(.bg-brand-gradient);
+  border: none;
+  &::after {
+    display: block;
+    position: relative;
+    background-color: inherit;
+    width: 100%;
+    height: 100%;
+    border-radius: 3px; // needs different sizes
+    content: ""
+  }
+  >span {
+    // required: assummed content
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 10px;
+  }
+}
