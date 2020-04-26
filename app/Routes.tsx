@@ -19,7 +19,7 @@ import WalletUnlockScreen from './components/screens/WalletUnlockScreen';
 
 import UserAccountsScreen from './components/screens/UserAccountsScreen';
 import UserAssetsScreen from './components/screens/UserAssetsScreen';
-import UserAssetDetailsScreen from './components/screens/UserAssetsScreen';
+import UserAssetDetailsScreen from './components/screens/UserAssetDetailsScreen';
 import UserTransactionsScreen from './components/screens/UserTransactionsScreen';
 import FreezeFundsScreen from './components/screens/FreezeFundsScreen'
 import UnfreezeFundsScreen from './components/screens/UnfreezeFundsScreen'
