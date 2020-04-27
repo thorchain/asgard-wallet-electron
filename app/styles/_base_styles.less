@@ -1,0 +1,44 @@
+
+html, body {
+  height: 100%;
+  letter-spacing: @text-letter-spacing;
+  overflow: hidden;
+}
+body > #app {
+  height: 100%;
+}
+body > #__blaze-root, body > #__react-root, body > #root {
+  height: 100%;
+}
+h1, h2, h3, h4 ,h5 {
+  letter-spacing: @headings-letter-spacing;
+}
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: @gray-9;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: @gray-6;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: @gray-4;
+}
+
+
+
+a, button, [class^=".btn"] {
+  cursor: pointer;
+}
+
+.list-links > li:hover {
+  background-color: @Primary-Gray;
+}

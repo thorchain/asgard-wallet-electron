@@ -8,7 +8,8 @@ import MissingRouteScreen from './components/screens/MissingRouteScreen'
 import BareLayout from './containers/BareLayout';
 import MainLayout from './containers/MainLayout';
 
-import MenuMain from './components/elements/MenuMain'
+import MenuMain from './components/elements/MenuMain';
+import FooterMain from './components/elements/FooterMain';
 
 import StartScreen from './components/screens/StartScreen';
 
@@ -35,43 +36,43 @@ export default function Routes() {
           <BareLayout content={<StartScreen />} />
         </Route>
         <Route exact path="/wallet-create">
-          <MainLayout header={<MenuMain />} content={<WalletCreateScreen />} />
+          <MainLayout header={<MenuMain />} content={<WalletCreateScreen />} footer={<FooterMain/>} />
         </Route>
         <Route exact path="/wallet-import">
-          <MainLayout header={<MenuMain />} content={<WalletImportScreen />} />
+          <MainLayout header={<MenuMain />} content={<WalletImportScreen />} footer={<FooterMain/>} />
         </Route>
         <Route exact path="/wallet-connect">
-          <MainLayout header={<MenuMain />} content={<WalletConnectScreen />} />
+          <MainLayout header={<MenuMain />} content={<WalletConnectScreen />} footer={<FooterMain/>} />
         </Route>
         <Route exact path="/user-assets">
-          <MainLayout header={<MenuMain />} content={<UserAssetsScreen />} />
+          <MainLayout header={<MenuMain />} content={<UserAssetsScreen />} footer={<FooterMain/>} />
         </Route>
         <Route exact path="/user-asset-details">
-          <MainLayout header={<MenuMain />} content={<UserAssetDetailsScreen />} />
+          <MainLayout header={<MenuMain />} content={<UserAssetDetailsScreen />} footer={<FooterMain/>} />
         </Route>
         <Route exact path="/user-transactions">
-          <MainLayout header={<MenuMain />} content={<UserTransactionsScreen />} />
+          <MainLayout header={<MenuMain />} content={<UserTransactionsScreen />} footer={<FooterMain/>} />
         </Route>
         <Route exact path="/user-accounts">
-          <MainLayout header={<MenuMain />} content={<UserAccountsScreen />} />
+          <MainLayout header={<MenuMain />} content={<UserAccountsScreen />} footer={<FooterMain/>} />
         </Route>
         <Route exact path="/send-funds">
-          <MainLayout header={<MenuMain />} content={<SendFundsScreen />} />
+          <MainLayout header={<MenuMain />} content={<SendFundsScreen />} footer={<FooterMain/>} />
         </Route>
         <Route exact path="/receive-funds">
-          <MainLayout header={<MenuMain />} content={<ReceiveFundsScreen />} />
+          <MainLayout header={<MenuMain />} content={<ReceiveFundsScreen />} footer={<FooterMain/>} />
         </Route>
         <Route exact path="/freeze-funds">
-          <MainLayout header={<MenuMain />} content={<FreezeFundsScreen />} />
+          <MainLayout header={<MenuMain />} content={<FreezeFundsScreen />} footer={<FooterMain/>} />
         </Route>
         <Route exact path="/unfreeze-funds">
-          <MainLayout header={<MenuMain />} content={<UnfreezeFundsScreen />} />
+          <MainLayout header={<MenuMain />} content={<UnfreezeFundsScreen />} footer={<FooterMain/>} />
         </Route>
         <Route exact path="/wallet-unlock">
-          <MainLayout header={<MenuMain />} content={<WalletUnlockScreen />} />
+          <MainLayout header={<MenuMain />} content={<WalletUnlockScreen />} footer={<FooterMain/>} />
         </Route>
         <Route path="*">
-            <MainLayout header={<MenuMain />} content={<MissingRouteScreen />} />
+            <MainLayout header={<MenuMain />} content={<MissingRouteScreen />} footer={<FooterMain/>} />
           </Route>
       </Switch>
     </App>

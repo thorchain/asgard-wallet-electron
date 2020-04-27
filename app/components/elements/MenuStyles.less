@@ -1,4 +1,4 @@
-@import '../../styles/_antd_custom.less';
+@import '../../styles/_antd_custom_variables_dark.less';
 
 .ant-drawer-body{
   padding: 0;
@@ -36,6 +36,7 @@
 }
 
 .my-drawer > .am-drawer-sidebar {
+  background-color: @Gray;
   overflow: visible;
   &::after {
     content: "";
@@ -75,11 +76,11 @@
 .ant-menu-vertical .ant-menu-item {
   font-size: @font-size-lg;
 }
-.am-navbar {
+header .am-navbar {
   position: fixed;
   width: 100%;
   z-index: 1;
-  height: unset !important;
+  height: @layout-header-height;
   .am-navbar-right {
     .ant-btn {
       width: unset;
@@ -90,5 +91,42 @@
         vertical-align: text-bottom;
       }
     }
+  }
+}
+
+
+
+
+header .am-navbar .ant-tabs-nav-container {
+  align-self: flex-end;
+ .ant-tabs-nav-wrap  {
+    margin-bottom: 0;
+    .ant-tabs-nav {
+
+      .ant-tabs-tab {
+
+        &.ant-tabs-tab-active {
+          color: unset !important;
+          &::after {
+            content: "";
+            display: block;
+            position: absolute;
+            width: 100%;
+            bottom: 0px;
+            left: 0px;
+            height: 2px;
+            background-image: linear-gradient(to right, @Asgard-Green, @Accent-Blue);
+          }
+
+        }
+
+
+      }
+
+
+    }
+
+
+
   }
 }

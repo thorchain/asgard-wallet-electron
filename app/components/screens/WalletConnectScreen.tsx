@@ -4,7 +4,7 @@ import { ledger, crypto } from '@binance-chain/javascript-sdk';
 // import Binance from '../binance'
 
 import React, { useState, useMemo } from 'react';
-import { useHistory } from 'react-router-dom'
+import { useHistory } from 'react-router-dom';
 import { Row, Col, message, InputNumber, Button, Card, Typography } from 'antd';
 const { Title } = Typography
 import { CheckSquareOutlined, MinusSquareOutlined } from '@ant-design/icons'

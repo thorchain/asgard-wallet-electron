@@ -3,7 +3,7 @@ import React, { useState, useCallback } from 'react'
 // import { WALLET } from '/imports/startup/client/init'
 import { Menu, Button } from 'antd'
 import { NavBar, Drawer } from 'antd-mobile'
-import { MenuOutlined } from '@ant-design/icons'
+import { MenuOutlined, WalletOutlined} from '@ant-design/icons'
 
 import './MenuStyles.less'
 import logoImg from '../../assets/img/Asgard-Tri-White.png'
@@ -23,6 +23,12 @@ const NavMenuMain: React.FC = (): JSX.Element => {
     <NavBar
       className="navbar-mobile"
       mode="dark"
+      leftContent={[
+        <Link to="/">
+          <img src={logoImg} className="float-left mr-2" style={{marginRight:"8px"}}width="28" height="28" alt="" />
+          <strong className="font-brand text-uppercase">Asgard</strong><small className='text-color-secondary'>&nbsp;BETA</small>
+        </Link>
+      ]}
       rightContent={[
         <div key="0" style={{display:"flex",alignItems:"center"}}>
           <NetworkIndicator/>
@@ -32,13 +38,27 @@ const NavMenuMain: React.FC = (): JSX.Element => {
         </div>
       ]}
     >
-      <Link to="/">
-        <img src={logoImg} className="float-left mr-2" width="28" height="28" alt="" />
-        <strong className="font-brand text-uppercase">Asgard</strong><small className='text-color-secondary'>&nbsp;BETA</small>
-      </Link>
+      <div className="ant-tabs-nav-container">
+        <div className="ant-tabs-nav-wrap">
+          <div className="ant-tabs-nav-scroll">
+            <div className="ant-tabs-nav ant-tabs-nav-animated">
+                <div role="tab" aria-disabled="false" aria-selected="true" tabIndex={0} className="ant-tabs-tab-active ant-tabs-tab" id="tab-testnet" aria-controls="tabpane-testnet">
+                  Swap
+                </div>
+                <div role="tab" aria-disabled="false" aria-selected="false" tabIndex={-1} className=" ant-tabs-tab" id="tab-mainnet" aria-controls="tabpane-mainnet">
+                  Stake
+                </div>
+                <div role="tab" aria-disabled="false" aria-selected="false" tabIndex={-2} className=" ant-tabs-tab" id="tab-mainnet" aria-controls="tabpane-mainnet">
+                {/* <WalletOutlined style={{fontSize:"inherit"}} />&nbsp; */}
+                  Wallet
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </NavBar>
     <Drawer
-      position="top"
+      position="right"
       className="my-drawer"
       style={{ minHeight: document.documentElement.clientHeight }}
       contentStyle={{paddingTop: 42 }}
