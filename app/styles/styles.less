@@ -16,11 +16,56 @@
   padding: 0 !important;
 }
 .ant-layout-content {
+  @media (min-width: @screen-md-min) {
+    margin-left: 24px;
+    margin-right: 24px;
+  }
+  margin-top: @grid-gutter-width;
   padding: 0 @grid-gutter-width / 2;
+  >.ant-row {
+    background-color: @Darker-Gray;
+    border-radius: @border-radius-base;
+  }
 }
+
+// FOOTER TODO: refactor out of here
 .ant-layout-footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
   padding: 0 !important;
+  .am-navbar-dark {
+    background-color: @Darker-Gray;
+    .am-navbar-title {
+      .ant-menu {
+        &.ant-menu-dark {
+          background: @Darker-Gray !important;
+          li.ant-menu-item {
+            color: @White-Gray !important;
+          }
+          li.ant-menu-item-selected {
+            // background-color: @Darker-Gray !important;
+            background: @Dark-Gray !important;
+            // color: @Light-Gray !important;
+            > a { color: @Light-Gray !important; }
+          }
+        }
+      }
+
+    }
+  }
+
 }
+
+
+// Card
+.ant-card:not([class^='bg-']) {
+  background-color: transparent;
+}
+.ant-card {
+  margin-bottom: @grid-gutter-width / 2 !important;
+}
+
 
 .ant-list-item {
   & h1, h2, h3, h4, h5 {

@@ -4,7 +4,7 @@ import React, { useMemo, useCallback } from 'react';
 // import { UserAccountTypes } from '/imports/api/collections/userAccountCollection';
 
 // import { WALLET } from '/imports/startup/client/init'
-import { Row, Col, Typography, Button, Divider } from 'antd';
+import { Row, Col, Typography, Button, Divider, Card, List } from 'antd';
 const { Title, Text, Paragraph } = Typography
 
 const userRecord = {
@@ -62,44 +62,86 @@ const UserAccountsScreen: React.FC = (): JSX.Element => {
     }
   },[])
 
-  return (
-    <Row>
-      <Col>
+  return (<>
         <Title level={3}>Account</Title>
+    <Row>
+      <Col span={24}>
 
-        <Paragraph strong className="text-uppercase" style={{marginBottom:"-1em", marginTop:"1.5em"}}>Details</Paragraph>
+        <div className="ant-tabs-nav-container">
+          <div className="ant-tabs-nav-wrap">
+            <div className="ant-tabs-nav-scroll">
+              <div className="ant-tabs-nav ant-tabs-nav-animated">
+                  <div role="tab" aria-disabled="false" aria-selected="true" tabIndex={0} className=" ant-tabs-tab" id="tab-testnet" aria-controls="tabpane-testnet">
+                    Testnet
+                  </div>
+                  <div role="tab" aria-disabled="false" aria-selected="false" tabIndex={-1} className="ant-tabs-tab-active ant-tabs-tab" id="tab-mainnet" aria-controls="tabpane-mainnet">
+                    Mainnet
+                  </div>
+                  <div className="ant-tabs-ink-bar ant-tabs-ink-bar-animated" style={{display:"block", transform: "translate3d(0px, 0px, 0px)", width: "87px;"}}></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <Divider/>
-        <Row>
-          <Col sm={{span:24}} md={{span:12}} lg={{span:6}}>
-            <Text strong>Account:</Text>
-            <Text ellipsis>{userAccount.address}</Text>
-          </Col>
-          <Col md={{span:12}} lg={{span:6}}>
-            <Text strong>Keystore Version:</Text>
-            <Paragraph>{userAccount?.keystore?.version}</Paragraph>
-          </Col>
-          <Col md={{span:12}} lg={{span:6}}>
-            <Text strong>Type:</Text>
-            <Paragraph className="text-capitalize">{client.network}</Paragraph>
-          </Col>
-          <Col md={{span:12}} lg={{span:6}}>
-            <Text strong>Chain ID:</Text>
-            <Paragraph className="text-capitalize">{client.chainId}</Paragraph>
-          </Col>
-        </Row>
   
-        <Divider/>
+
 
         <Row>
 
-          <Col md={{span:16,offset:4}} lg={{span:14,offset:5}} xl={{span:12,offset:6}}>
+          <Col md={{span:12}} lg={{span:12}} xl={{span:12}}>
+            <Paragraph strong className="text-uppercase">Wallet Management</Paragraph>
+            <Card>
+            <Row>
+              <Col span={12}>
+                <Button type="ghost" shape="round" block onClick={lockWallet}>Lock Wallet</Button>
+              </Col>
+              <Col span={12}>
+                <Button type="ghost" shape="round" block disabled={true}>View Phrase</Button>
+              </Col>
+              <Col span={12}>
+                <Button type="ghost" shape="round" block href={downloadLink} download={fileName()}>Export Keystore</Button>
+              </Col>
+              <Col span={12}>
+                <Button type="ghost" danger shape="round" block onClick={removeWallet}>Remove Wallet</Button>
+              </Col>
+            </Row>
+            
+
+            </Card>
+            <Paragraph strong className="text-uppercase">Network Client</Paragraph>
+            <Card>
+              <Row>
+                <Col md={{span:24}} lg={{span:12}}>
+                  <Text strong>Account:</Text>
+                  <Text ellipsis>{userAccount.address}</Text>
+                </Col>
+                <Col md={{span:24}} lg={{span:12}}>
+                  <Text strong>Keystore Version:</Text>
+                  <Paragraph>{userAccount?.keystore?.version}</Paragraph>
+                </Col>
+                <Col md={{span:24}} lg={{span:12}}>
+                  <Text strong>Type:</Text>
+                  <Paragraph className="text-capitalize">{client.network}</Paragraph>
+                </Col>
+                <Col md={{span:24}} lg={{span:12}}>
+                  <Text strong>Chain ID:</Text>
+                  <Paragraph className="text-capitalize">{client.chainId}</Paragraph>
+                </Col>
+              </Row>
+            </Card>
         
-            <Title level={4}>Wallet Management</Title>
-            <Button type="primary" size="large" block onClick={lockWallet} style={{marginTop:"32px",marginBottom:"32px"}}>Lock Wallet</Button>
-            <Button type="primary" size="large" block disabled={true}>View Phrase</Button>
-            <a href={downloadLink} download={fileName()} className="ant-btn ant-btn-lg ant-btn-primary" style={{width:'100%'}}>Export Keystore</a>
-            <Button type="danger" size="large" block onClick={removeWallet}>Remove Wallet</Button>
         
+          </Col>
+
+          <Col sm={{span:24}} md={{span:12}} lg={{span:12}} xl={{span:12}}>
+            <Paragraph strong className="text-uppercase">Wallet Accounts</Paragraph>
+            {/* <List dataSource={[userRecord]}>
+
+            </List> */}
+            <Card title="Accounts">
+              More
+            </Card>
           </Col>
 
         </Row>
@@ -107,7 +149,7 @@ const UserAccountsScreen: React.FC = (): JSX.Element => {
       </Col>
 
     </Row>
-  )
+  </>)
 }
 
 export default UserAccountsScreen

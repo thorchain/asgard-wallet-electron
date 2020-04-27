@@ -22,7 +22,7 @@ const NetworkIndicator: React.FC = (): JSX.Element => {
   return (
     <Tooltip title={titleText}>
       <div style={{display:"inline-flex",marginRight:"12px"}}>
-        <DeploymentUnitOutlined style={{fontSize:"28px"}} className={networkTypeClass} />
+        <DeploymentUnitOutlined style={{fontSize:"24px"}} className={networkTypeClass} />
       </div>
     </Tooltip>
   )
