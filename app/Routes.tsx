@@ -14,6 +14,7 @@ import FooterMain from './components/elements/FooterMain';
 import StartScreen from './components/screens/StartScreen';
 
 import WalletCreateScreen from './components/screens/WalletCreateScreen';
+import WalletMnemonicConfirmScreen from './components/screens/WalletMnemonicConfirmScreen';
 import WalletImportScreen from './components/screens/WalletImportScreen';
 import WalletConnectScreen from './components/screens/WalletConnectScreen';
 import WalletUnlockScreen from './components/screens/WalletUnlockScreen';
@@ -37,6 +38,9 @@ export default function Routes() {
         </Route>
         <Route exact path="/wallet-create">
           <MainLayout header={<MenuMain />} content={<WalletCreateScreen />} footer={<FooterMain/>} />
+        </Route>
+        <Route exact path="/wallet-mnemonic-confirm">
+          <MainLayout header={<MenuMain />} content={<WalletMnemonicConfirmScreen />} footer={<FooterMain/>} />
         </Route>
         <Route exact path="/wallet-import">
           <MainLayout header={<MenuMain />} content={<WalletImportScreen />} footer={<FooterMain/>} />
@@ -78,17 +82,3 @@ export default function Routes() {
     </App>
   );
 }
-
-/*
-
-routes:
-
-user-asset-details
-recieve-funds
-send-funds
-freeze-funds
-unfreeze-funds
-wallet-create
-wallet-import
-wallet-connect
-*/

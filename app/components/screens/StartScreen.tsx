@@ -40,15 +40,15 @@ const StartScreen: React.FC = (props:any): JSX.Element => {
 
           <TabPane tab="Testnet" key="testnet">
 
-            <Button type="primary" size={'large'} className={'ant-btn-brand'} block onClick={() => goto('walletCreate')}> New </Button>
-            <Button type="primary" size={'large'} block onClick={() => goto('walletImport')}> Import </Button>
+            <Button type="primary" size={'large'} className={'ant-btn-brand'} block onClick={() => goto('/wallet-create')}> New </Button>
+            <Button type="primary" size={'large'} block onClick={() => goto('/wallet-import')}> Import </Button>
 
           </TabPane>
 
           <TabPane tab="Mainnet" key="mainnet">
 
-            <Button type="primary" size={'large'} className={'ant-btn-brand'} block onClick={() => goto('/create')}> New </Button>
-            <Button type="primary" size={'large'} block onClick={() => goto('/import')}>Import</Button>
+            <Button type="primary" size={'large'} className={'ant-btn-brand'} block onClick={() => goto('/wallet-create')}> New </Button>
+            <Button type="primary" size={'large'} block onClick={() => goto('/wallet-import')}>Import</Button>
             <Link to="/wallet-connect">
               <Button type="primary" size="large" block>Connect</Button>
             </Link>

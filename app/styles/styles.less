@@ -4,11 +4,23 @@
 @import '~typeface-montserrat/index.css';
 @import '~typeface-exo-2/index.css';
 
-// First heading in row
-.ant-row > .ant-col {
-  > h1:first-child, > h2:first-child, > h3:first-child, > h4:first-child, > h5:first-child {
-      text-align: center;
-      text-transform: uppercase;
+.ant-layout-content > .ant-row { 
+  margin-bottom: @grid-gutter-width / 2;
+  > .ant-col {
+    // First heading in row > col
+    > h1:first-child, > h2:first-child, > h3:first-child, > h4:first-child, > h5:first-child {
+        text-align: center;
+        text-transform: uppercase;
+    }
+
+  }
+}
+.ant-row {
+  margin-left: @grid-gutter-width / -2;
+  margin-right: @grid-gutter-width / -2;
+  .ant-col {
+    padding-left: @grid-gutter-width / 2;
+    padding-right: @grid-gutter-width / 2;
   }
 }
 
