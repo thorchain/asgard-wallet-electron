@@ -24,7 +24,7 @@ const NavMenuMain: React.FC = (): JSX.Element => {
       className="navbar-mobile"
       mode="dark"
       leftContent={[
-        <Link to="/">
+        <Link to="/" key={0}>
           <img src={logoImg} className="float-left mr-2" style={{marginRight:"8px"}}width="28" height="28" alt="" />
           <strong className="font-brand text-uppercase">Asgard</strong><small className='text-color-secondary'>&nbsp;BETA</small>
         </Link>
@@ -44,7 +44,7 @@ const NavMenuMain: React.FC = (): JSX.Element => {
         </div>
       ]}
     >
-      <div className="ant-tabs-nav-container">
+      <div className="ant-tabs-nav-container" key={0}>
         <div className="ant-tabs-nav-wrap">
           <div className="ant-tabs-nav-scroll">
             <div className="ant-tabs-nav ant-tabs-nav-animated">

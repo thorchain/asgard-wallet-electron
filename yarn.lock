@@ -9589,6 +9589,11 @@ jsprim@^1.2.2:
     json-schema "0.2.3"
     verror "1.10.0"
 
+jsstore@^3.7.6:
+  version "3.7.6"
+  resolved "https://registry.yarnpkg.com/jsstore/-/jsstore-3.7.6.tgz#380f14d9b3283f75db344eeb02afdb3b93ec8895"
+  integrity sha512-WVqg+8eF80XKNvWieFbiLn7vakejq6tQX4GPIq88oAzLE+BCE0UbXvRs5f18Q1qOfnmTeRkmoGmiPK5uV9HXCw==
+
 jsx-ast-utils@^2.2.1, jsx-ast-utils@^2.2.3:
   version "2.2.3"
   resolved "https://registry.yarnpkg.com/jsx-ast-utils/-/jsx-ast-utils-2.2.3.tgz#8a9364e402448a3ce7f14d357738310d9248054f"

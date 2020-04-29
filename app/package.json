@@ -17,6 +17,7 @@
   "dependencies": {
     "@binance-chain/javascript-sdk": "^2.16.4",
     "@ledgerhq/hw-transport-node-hid": "^5.13.1",
+    "jsstore": "^3.7.6",
     "typeface-exo-2": "^1.1.4",
     "typeface-montserrat": "^0.0.75",
     "typeface-open-sans": "^0.0.75",
