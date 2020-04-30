@@ -1,14 +1,14 @@
-import { BaseService } from "./baseService";
+import { BaseService } from './baseService';
 
-export class TransactionService extends BaseService {
-
+export class AssetService extends BaseService {
   constructor() {
       super();
-      this.tableName = "Transactions";
+      console.log('constructing assets service...')
+      this.tableName = "Assets";
   }
 
   findAll() {
-      console.log('trying to get transactions')
+    console.log('attempting to find all assets')
       return this.connection.select({
           from: this.tableName,
       })
@@ -23,7 +23,7 @@ export class TransactionService extends BaseService {
       })
   }
 
-  findOne(id) {
+  findById(id) {
       return this.connection.select({
           from: this.tableName,
           where: {
@@ -32,7 +32,7 @@ export class TransactionService extends BaseService {
       })
   }
 
-  removeOne(id) {
+  removeById(id) {
       return this.connection.remove({
           from: this.tableName,
           where: {
@@ -46,7 +46,7 @@ export class TransactionService extends BaseService {
       })
   }
 
-  updateOne(id, updateData) {
+  updateById(id, updateData) {
       return this.connection.update({ in: this.tableName,
           set: updateData,
           where: {
@@ -54,4 +54,5 @@ export class TransactionService extends BaseService {
           }
       })
   }
+
 }

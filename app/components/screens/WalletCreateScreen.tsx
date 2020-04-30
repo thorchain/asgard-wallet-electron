@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router'
-// import { Session } from 'meteor/session'
 const bip39 = require( 'bip39');
 
 import NewWalletKeystoreForm from '../forms/NewWalletKeystoreForm';
@@ -18,8 +17,6 @@ const WalletCreateScreen: React.FC<{type?:string}> = ({type}): JSX.Element => {
     if (false) {
       // setMnemonic(Session.get('mnemonic'));
     } else {
-      console.log("why the fuck no bip39...")
-      console.log(bip39)
       mnemonic = bip39?.generateMnemonic();
       // check for duplicates
       let findDuplicates = (arr: string[]) => arr.filter((item, index) => arr.indexOf(item) != index)

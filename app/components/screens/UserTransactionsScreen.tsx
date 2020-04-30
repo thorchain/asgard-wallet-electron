@@ -1,71 +1,76 @@
 import React, { useEffect, useState, useMemo } from 'react';
-// import Wallet from '../../api/WalletController/storage'
 import { TransactionService } from '../../api/WalletController/storage/transactionsService'
 import { Col, Row } from 'antd';
-// const wallet = new Wallet()
+// import { initJsStore } from '../../api/WalletController/storage/idbService';
+// import { WalletStore } from '../../api/WalletController/storage/wallet_store.js'
+
 
 const UserTransactionsScreen: React.FC = (): JSX.Element => {
-  const [txs, setTxs] = useState([{price:'test'},{price:'test2'}])
-  const [inited, setInited ] = useState(false)
-  console.log("we are string buildng the wallet store...")
-  // console.log(WalletStore)
-  const store = new TransactionService ()
-  // let wallet:any
-  // const wallet = new Wallet()
-  async function setupWallet () {
-    // wallet = new Wallet()
-    // await wallet.init()
-    console.log('initializing the store...')
-    // console.log(wallet)
-    const txs = await store.getTxs();
-    setTxs(txs)
+  let store:any
+  const [txs, setTxs] = useState<any>([])
+  const [inited, setInited ] = useState<boolean>(false)
+  store = new TransactionService()
+
+  async function initData() {
+    await setData()
     setInited(true)
   }
-  async function addItem (item:any) {
-    console.log("in async function component adding item")
-    await store.addTxs([item])
+  async function setData() {
+    const res = await store.findAll()
+    console.log('updating the state...')
+    if (txs.length > 0) {
+      setTxs(res)
+    }
   }
+
+
   useEffect(() => {
-    console.log('using effect...')
-    console.log(txs)
-    // setupWallet()
+    console.log('using effect again...')
+    console.log(store)
+    // store.init()
     if (!inited) {
-      setupWallet()
+      initData()
     }
   }, []);
-  const addData = async () =>  {
-    console.log('setting the data in handler...')
-    // return new Promise(() => {})
-    // return await wallet.db.select({from:'Product'})
-    // return txs
-    // await wallet.db.insert()
+
+  const addData = async (e:any) =>  {
+    e.preventDefault()
+    console.log('submitted form')
+    const amount = parseInt(e.currentTarget.amount.value)
     const obj = {
+      to: 'soei',
+      from: '392039',
       type: 'transfer',
-      amount: 9001,
-      asset: 'BNB',
-      txid: 'sdofijsdoifj',
-      to: 'sally-joe',
-      from: 'billy-bob'
+      amount: amount,
+      asset: 'tbnb',
+      txid: '_idfijej'
     }
-    await store.addTxs([obj])
-    const data = await store.getTxs()
-    setTxs(data)
-    // addItem(obj)
+    await store.insert([obj])
+    console.log('we got result from insert...')
+    // await setData()
+    const res = await store.connection.select({from:'Transactions'})
+    setTxs(res)
   }
-  const txData = () => useMemo( () => {
-    
-  },[store])
+  const handleClear = () => {
+    // store.removeAll()
+  }
   return (
     <Row>
       <Col>
-        <h1 onClick={addData}>
-          User Transactions
-        </h1>
+        <form onSubmit={addData}>
+          <input type="test" className="ant-input" name="amount" />
+          <button className="ant-btn ant-btn-block" type="submit">
+            User Transactions
+          </button>
+        </form>
+          <button className="ant-btn ant-btn-block" type="submit" onClick={handleClear}>
+            clear?
+          </button>
         <table>
           <tbody>
             <tr><td>test</td></tr>
-            {txs.map((e:any) => (
-              <tr><td>{e.from}</td><td>{e.to}</td><td>{e.amount}</td><td>{e.asset}</td></tr>
+            {txs.map((e:any, i:number) => (
+              <tr key={i}><td>{e.from}</td><td>{e.to}</td><td>{e.amount}</td><td>{e.asset}</td></tr>
             ))}
           </tbody>
         </table>
@@ -75,4 +80,3 @@ const UserTransactionsScreen: React.FC = (): JSX.Element => {
 }
 
 export default UserTransactionsScreen;
-
