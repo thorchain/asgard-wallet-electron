@@ -23,7 +23,7 @@ export class AssetService extends BaseService {
       })
   }
 
-  findById(id) {
+  findOne(id) {
       return this.connection.select({
           from: this.tableName,
           where: {
@@ -32,7 +32,7 @@ export class AssetService extends BaseService {
       })
   }
 
-  removeById(id) {
+  removeOne(id) {
       return this.connection.remove({
           from: this.tableName,
           where: {
@@ -46,7 +46,7 @@ export class AssetService extends BaseService {
       })
   }
 
-  updateById(id, updateData) {
+  updateOne(id, updateData) {
       return this.connection.update({ in: this.tableName,
           set: updateData,
           where: {

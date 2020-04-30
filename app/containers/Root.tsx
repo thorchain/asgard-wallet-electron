@@ -5,8 +5,6 @@ import { hot } from 'react-hot-loader/root';
 import { History } from 'history';
 import { Store } from '../reducers/types';
 import Routes from '../Routes';
-import { initJsStore } from "../api/WalletController/storage/idbService";
-initJsStore()
 
 
 

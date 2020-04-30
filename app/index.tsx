@@ -5,15 +5,18 @@ import { AppContainer as ReactHotAppContainer } from 'react-hot-loader';
 import Root from './containers/Root';
 import { configureStore, history } from './store/configureStore';
 
+import { initJsStore } from "./api/WalletController/storage/idbService";
+
 const store = configureStore();
 
 const AppContainer = process.env.PLAIN_HMR ? Fragment : ReactHotAppContainer;
 
-document.addEventListener('DOMContentLoaded', () =>
+document.addEventListener('DOMContentLoaded', async () => {
+  await initJsStore()
   render(
     <AppContainer>
       <Root store={store} history={history} />
     </AppContainer>,
     document.getElementById('root')
   )
-);
+});

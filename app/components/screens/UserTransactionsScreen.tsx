@@ -1,8 +1,7 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { TransactionService } from '../../api/WalletController/storage/transactionsService'
+
 import { Col, Row } from 'antd';
-// import { initJsStore } from '../../api/WalletController/storage/idbService';
-// import { WalletStore } from '../../api/WalletController/storage/wallet_store.js'
 
 
 const UserTransactionsScreen: React.FC = (): JSX.Element => {
@@ -17,8 +16,9 @@ const UserTransactionsScreen: React.FC = (): JSX.Element => {
   }
   async function setData() {
     const res = await store.findAll()
+    // const res = await store.connection.select({from:'Transactions'})
     console.log('updating the state...')
-    if (txs.length > 0) {
+    if (res.length > 0) {
       setTxs(res)
     }
   }
@@ -31,7 +31,7 @@ const UserTransactionsScreen: React.FC = (): JSX.Element => {
     if (!inited) {
       initData()
     }
-  }, []);
+  }, [store]);
 
   const addData = async (e:any) =>  {
     e.preventDefault()
@@ -47,12 +47,7 @@ const UserTransactionsScreen: React.FC = (): JSX.Element => {
     }
     await store.insert([obj])
     console.log('we got result from insert...')
-    // await setData()
-    const res = await store.connection.select({from:'Transactions'})
-    setTxs(res)
-  }
-  const handleClear = () => {
-    // store.removeAll()
+    await setData()
   }
   return (
     <Row>
@@ -60,19 +55,27 @@ const UserTransactionsScreen: React.FC = (): JSX.Element => {
         <form onSubmit={addData}>
           <input type="test" className="ant-input" name="amount" />
           <button className="ant-btn ant-btn-block" type="submit">
-            User Transactions
+            Insert Tx
           </button>
         </form>
-          <button className="ant-btn ant-btn-block" type="submit" onClick={handleClear}>
+          <button className="ant-btn ant-btn-block" type="submit">
             clear?
           </button>
         <table>
-          <tbody>
-            <tr><td>test</td></tr>
-            {txs.map((e:any, i:number) => (
-              <tr key={i}><td>{e.from}</td><td>{e.to}</td><td>{e.amount}</td><td>{e.asset}</td></tr>
-            ))}
-          </tbody>
+          {txs && txs.length > 0 ? (
+            <tbody>
+              <tr><td>test</td></tr>
+              {txs.map((e:any, i:number) => (
+                <tr key={i}><td>{e.from}</td><td>{e.to}</td><td>{e.amount}</td><td>{e.asset}</td></tr>
+              ))}
+            </tbody>
+          ) : (
+
+            <tbody>
+              <tr><td>no data</td></tr>
+            </tbody>
+
+          )}
         </table>
       </Col>
     </Row>

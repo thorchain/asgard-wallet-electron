@@ -8,7 +8,7 @@ export const dbname = 'wallet_store2';
 const getDatabase = () => {
     const dataBase = {
         name: dbname,
-        tables: [TransactionTable]
+        tables: [TransactionTable, AssetTable]
     };
     return dataBase;
 };
