@@ -3,7 +3,7 @@ import { TransactionTable, AssetTable } from './tables'
 
 const workerPath = 'node_modules/jsstore/dist/jsstore.worker.js';
 export const idbCon = new JsStore.Connection(new Worker(workerPath));
-export const dbname = 'wallet_store2';
+export const dbname = 'wallet_store4';
 
 const getDatabase = () => {
     const dataBase = {

@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { TransactionService } from '../../api/WalletController/storage/transactionsService'
+// import { WalletStore } from '../../api/WalletController/storage/wallet_store.js'
 
 import { Col, Row } from 'antd';
 
@@ -16,7 +17,7 @@ const UserTransactionsScreen: React.FC = (): JSX.Element => {
   }
   async function setData() {
     const res = await store.findAll()
-    // const res = await store.connection.select({from:'Transactions'})
+    // const res = await store.db.select({from:'Transactions'})
     console.log('updating the state...')
     if (res.length > 0) {
       setTxs(res)
@@ -25,9 +26,6 @@ const UserTransactionsScreen: React.FC = (): JSX.Element => {
 
 
   useEffect(() => {
-    console.log('using effect again...')
-    console.log(store)
-    // store.init()
     if (!inited) {
       initData()
     }

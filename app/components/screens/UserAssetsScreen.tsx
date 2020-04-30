@@ -3,30 +3,37 @@ import { Link } from 'react-router-dom'
 import { Button, Row, Col } from 'antd'
 import { useHistory } from 'react-router'
 
-// import { AssetService } from '../../api/WalletController/storage/assetsService'
+import { AssetService } from '../../api/WalletController/storage/assetsService'
 
 const UserAssetsScreen: React.FC = (): JSX.Element => {
+  let store:any
   const [assets, setAssets] = useState([])
   const [inited, setInited ] = useState(false)
   let history = useHistory()
-  // const store = new AssetService()
-  async function setupStore () {
+  store = new AssetService()
+
+  async function initData () {
     console.log('initializing the store...')
-    // const assets = await store.findAll();
-    // setAssets(assets)
-    // setInited(true)
+    await setData()
+    setInited(true)
+  }
+  async function setData() {
+    const res = await store.findAll()
+    if (res.length > 0) {
+      console.log('we set data...')
+      setAssets(res)
+    }
   }
   useEffect(() => {
-    console.log('using effect...')
     if (!inited) {
-      setupStore()
+      initData()
     }
   },[])
   const propagateData = async () => {
     console.log("propagating data...")
-    // await store.insert(balances)
-    // const data = await store.findAll()
-    // setAssets(data)
+    await store.insert(balances)
+    const data = await store.findAll()
+    setAssets(data)
   }
   return (
     <Row>
@@ -36,8 +43,8 @@ const UserAssetsScreen: React.FC = (): JSX.Element => {
         <Button type="primary" onClick={() => history.push('/user-asset-details')}>Go Details</Button>
         <ul>
           <li>test1</li>
-          {assets.map((e:any) => (
-            <li>item</li>
+          {assets.map((e:any,i:number) => (
+            <li key={i}>{e.symbol}: {e.free}</li>
           ))}
         </ul>
         <Button type="primary" onClick={propagateData}>add data</Button>
