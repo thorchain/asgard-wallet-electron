@@ -13,6 +13,8 @@ import FooterMain from './components/elements/FooterMain';
 
 import StartScreen from './components/screens/StartScreen';
 
+import AdminScreen from './components/screens/AdminScreen';
+
 import WalletCreateScreen from './components/screens/WalletCreateScreen';
 import WalletMnemonicConfirmScreen from './components/screens/WalletMnemonicConfirmScreen';
 import WalletImportScreen from './components/screens/WalletImportScreen';
@@ -74,6 +76,9 @@ export default function Routes() {
         </Route>
         <Route exact path="/wallet-unlock">
           <MainLayout header={<MenuMain />} content={<WalletUnlockScreen />} footer={<FooterMain/>} />
+        </Route>
+        <Route exact path="/wallet-admin">
+          <MainLayout header={<MenuMain />} content={<AdminScreen />} footer={<FooterMain/>} />
         </Route>
         <Route path="*">
             <MainLayout header={<MenuMain />} content={<MissingRouteScreen />} footer={<FooterMain/>} />

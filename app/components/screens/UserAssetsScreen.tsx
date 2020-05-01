@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Button, Row, Col } from 'antd'
+import { Button, Row, Col, Typography, List } from 'antd'
 import { useHistory } from 'react-router'
+import Block from '../elements/Block'
+import CircleIcon, { Sizes } from '../elements/CircleIcon/circleIcon'
+const { Title, Text } = Typography
+
+import { shortSymbol } from '../helpers/tokenHelpers'
 
 import { AssetService } from '../../api/WalletController/storage/assetsService'
 
@@ -37,17 +42,24 @@ const UserAssetsScreen: React.FC = (): JSX.Element => {
   }
   return (
     <Row>
-      <Col>
-        <h3>User Assets</h3>
-        <Link to="/user-asset-details">Asset Details</Link>
-        <Button type="primary" onClick={() => history.push('/user-asset-details')}>Go Details</Button>
-        <ul>
+      <Col span={24}>
+        <Title level={4}>User Assets</Title>
+        {/* <Link to="/user-asset-details">Asset Details</Link> */}
+        {/* <Button type="primary" onClick={() => history.push('/user-asset-details')}>Go Details</Button> */}
+        <List dataSource={assets}
+          renderItem={(asset:any) => (
+            <List.Item key={asset.id} onClick={() => console.log("go to details")}>
+              <AssetRow asset={asset}/>
+            </List.Item>
+          )}
+        />
+        {/* <ul>
           <li>test1</li>
           {assets.map((e:any,i:number) => (
             <li key={i}>{e.symbol}: {e.free}</li>
           ))}
-        </ul>
-        <Button type="primary" onClick={propagateData}>add data</Button>
+        </ul> */}
+        {/* <Button type="primary" onClick={propagateData}>add data</Button> */}
       </Col>
     </Row>
   )
@@ -105,3 +117,64 @@ const balances = [
     "symbol": "LOK-3C0"
   }
 ]
+
+
+// import React from "react";
+// import { useTracker } from 'meteor/react-meteor-data';
+// import { UserAssets } from '/imports/api/collections/client_collections'
+// import { UserAssetsTypes } from '/imports/api/collections/userAssetsCollection'
+// import { TokenData } from '/imports/api/collections/client_collections'
+// import { TokenDataTypes } from '/imports/api/collections/tokenDataCollection'
+
+// import { Row, Col, Typography, List } from 'antd'
+// import Block from "/imports/ui/components/elements/block/block";
+
+// const UserAssetsScreen: React.FC = (): JSX.Element => {
+//   const userAssets: UserAssetsTypes[] = useTracker(() => {
+//     return UserAssets.find({},{sort: {symbol: 1}}).fetch()
+//   }, [UserAssets])
+//   return (
+//     <Row>
+//       <Col>
+//         <Title level={4}>Assets</Title>
+//         <List dataSource={userAssets}
+//           renderItem={asset => (
+//             <List.Item key={asset._id} onClick={() => FlowRouter.go('walletAssetDetails', {symbol: asset.symbol})}>
+//               <AssetRow asset={asset}/>
+//             </List.Item>
+//           )}
+//         />
+//       </Col>
+//     </Row>
+//   )
+// }
+
+// export default UserAssetsScreen
+
+type RowProps = {asset: any}
+const AssetRow: React.FC<RowProps> = ({asset}): JSX.Element  => {
+  // const token: TokenDataTypes = useTracker(() => {
+  //   return TokenData.findOne({symbol:asset.symbol})
+  // },[TokenData])
+  return (
+    <Block layout center>
+
+      <Block style={{marginRight:16}}>
+        <CircleIcon shortSymbol={shortSymbol(asset.symbol)} size={Sizes.md}/>
+      </Block>
+
+      <Block flex baseline justifyStart>
+        <Title level={4}>
+          <span>[{shortSymbol(asset.symbol)}]&nbsp;</span>
+        </Title>
+        <div>Token Name&nbsp;</div>
+        <Text strong type="secondary"><small>{asset.symbol}</small>&nbsp;</Text>
+      </Block>
+
+      <Block layout vertical end>
+        <div className="h5 mb-0 text-right">{asset.free.toLocaleString()}</div>
+        <div className="text-right font-italic text-muted small">0.00</div>
+      </Block>
+    </Block>
+  )
+}

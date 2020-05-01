@@ -115,6 +115,9 @@ const TopMenu: React.FC<{handler:()=>void}> = ({handler}): JSX.Element => {
       <Menu.Item key="walletAccounts">
         <Link to="/user-accounts">Accounts</Link>
       </Menu.Item>
+      <Menu.Item key="walletAdmin">
+        <Link to="/wallet-admin">Admin</Link>
+      </Menu.Item>
       <Menu.Item>
         <Link to="/">Lock</Link>
       </Menu.Item>
