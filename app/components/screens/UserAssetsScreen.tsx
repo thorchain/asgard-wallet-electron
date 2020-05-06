@@ -34,12 +34,6 @@ const UserAssetsScreen: React.FC = (): JSX.Element => {
       initData()
     }
   },[])
-  const propagateData = async () => {
-    console.log("propagating data...")
-    await store.insert(balances)
-    const data = await store.findAll()
-    setAssets(data)
-  }
   return (
     <Row>
       <Col span={24}>
@@ -48,18 +42,11 @@ const UserAssetsScreen: React.FC = (): JSX.Element => {
         {/* <Button type="primary" onClick={() => history.push('/user-asset-details')}>Go Details</Button> */}
         <List dataSource={assets}
           renderItem={(asset:any) => (
-            <List.Item key={asset.id} onClick={() => console.log("go to details")}>
+            <List.Item key={asset.id} onClick={() => history.push(`/user-asset-details?symbol=${asset.symbol}`)}>
               <AssetRow asset={asset}/>
             </List.Item>
           )}
         />
-        {/* <ul>
-          <li>test1</li>
-          {assets.map((e:any,i:number) => (
-            <li key={i}>{e.symbol}: {e.free}</li>
-          ))}
-        </ul> */}
-        {/* <Button type="primary" onClick={propagateData}>add data</Button> */}
       </Col>
     </Row>
   )
@@ -67,89 +54,6 @@ const UserAssetsScreen: React.FC = (): JSX.Element => {
 
 export default UserAssetsScreen
 
-const balances = [
-  {
-    "free": "66.00000000",
-    "frozen": "15.00000000",
-    "locked": "0.00000000",
-    "symbol": "RUNE-A1F"
-  },
-  {
-    "free": "9.00000000",
-    "frozen": "0.00000000",
-    "locked": "0.00000000",
-    "symbol": "TATIC-E9C"
-  },
-  {
-    "free": "886.00000000",
-    "frozen": "417.00000000",
-    "locked": "0.00000000",
-    "symbol": "TCAN-014"
-  },
-  {
-    "free": "9.00000000",
-    "frozen": "0.00000000",
-    "locked": "0.00000000",
-    "symbol": "TOMOB-1E1"
-  },
-  {
-    "free": "19.94025000",
-    "frozen": "2.00000000",
-    "locked": "0.00000000",
-    "symbol": "BNB"
-  },
-  {
-    "free": "23.00000000",
-    "frozen": "0.00000000",
-    "locked": "0.00000000",
-    "symbol": "FSN-F1B"
-  },
-  {
-    "free": "93.00000000",
-    "frozen": "12.00000000",
-    "locked": "0.00000000",
-    "symbol": "FTM-585"
-  },
-  {
-    "free": "208.23000000",
-    "frozen": "53.00000000",
-    "locked": "0.00000000",
-    "symbol": "LOK-3C0"
-  }
-]
-
-
-// import React from "react";
-// import { useTracker } from 'meteor/react-meteor-data';
-// import { UserAssets } from '/imports/api/collections/client_collections'
-// import { UserAssetsTypes } from '/imports/api/collections/userAssetsCollection'
-// import { TokenData } from '/imports/api/collections/client_collections'
-// import { TokenDataTypes } from '/imports/api/collections/tokenDataCollection'
-
-// import { Row, Col, Typography, List } from 'antd'
-// import Block from "/imports/ui/components/elements/block/block";
-
-// const UserAssetsScreen: React.FC = (): JSX.Element => {
-//   const userAssets: UserAssetsTypes[] = useTracker(() => {
-//     return UserAssets.find({},{sort: {symbol: 1}}).fetch()
-//   }, [UserAssets])
-//   return (
-//     <Row>
-//       <Col>
-//         <Title level={4}>Assets</Title>
-//         <List dataSource={userAssets}
-//           renderItem={asset => (
-//             <List.Item key={asset._id} onClick={() => FlowRouter.go('walletAssetDetails', {symbol: asset.symbol})}>
-//               <AssetRow asset={asset}/>
-//             </List.Item>
-//           )}
-//         />
-//       </Col>
-//     </Row>
-//   )
-// }
-
-// export default UserAssetsScreen
 
 type RowProps = {asset: any}
 const AssetRow: React.FC<RowProps> = ({asset}): JSX.Element  => {

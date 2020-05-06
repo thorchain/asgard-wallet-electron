@@ -1,34 +1,35 @@
 import { BaseService } from './baseService';
 
-export class AssetService extends BaseService {
+export class AccountService extends BaseService {
   constructor() {
       super();
       console.log('constructing assets service...')
-      this.tableName = "Assets";
+      this.tableName = "Accounts";
   }
 
   async findAll() {
-    console.log('attempting to find all assets')
+    console.log('attempting to find all user accounts')
       return await this.connection.select({
-          from: this.tableName,
+          from: this.tableName
       })
   }
 
-  async insert(txs) {
+  async insert(vals) {
+    console.log('why is insert failing?')
+    console.log(vals)
       return await this.connection.insert({
           into: this.tableName,
-          values: txs,
+          values: vals,
           return: true // since studentid is autoincrement field and we need id, 
           // so we are making return true which will return the whole data inserted.
       })
   }
 
   async findOne(opts) {
-    const query = {}
-    if (opts) { query.where = opts}
+    const query = opts || {}
     query.from = this.tableName
-    const res =  await this.connection.select(query)
-    return res && res[res.length -1]
+    const res = await this.connection.select(query)
+    return res && res[res.length-1]
   }
 
   async removeOne(id) {

@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react"
 // import { useTracker } from 'meteor/react-meteor-data'
 // import { UserAccountTypes } from '/imports/api/collections/UserAccountCollection'
 // import { UserAccount } from '/imports/api/collections/client_collections'
-
+import { AccountService } from '../../api/WalletController/storage/accountsService'
+const UserAccount = new AccountService()
 import Clipboard from 'clipboard'
 import QRCode from 'qrcode'
 import { Row, Col, Typography, Card, Button } from "antd"
@@ -11,16 +12,18 @@ const { Title, Text } = Typography
 
 const RecieveFundsScreen: React.FC = (): JSX.Element => {
   const [copyMsg, setCopyMsg] = useState<string>('')
-  const userAccount: UserAccountTypes = () => {
-    // return UserAccount.findOne()
-    return {
-      address: "tbnb09sd0f9address"
-    }
+  const userAccount: any = async () => {
+    console.log('are we finding the user account?')
+    return await UserAccount.findOne()
   }
   useEffect(() => {
-    QRCode.toCanvas(userAccount.address, { errorCorrectionLevel: 'H' }, function (err: any, canvas: any) {
+    console.log('figuring out the qr code...')
+    console.log(userAccount())
+    QRCode.toCanvas(userAccount().address, { errorCorrectionLevel: 'H' }, function (err: any, canvas: any) {
       if (err) throw err
+      console.log('is this it?')
       const container = document.getElementById('qr-container')
+      console.log(container)
       container && container.appendChild(canvas)
     })
 

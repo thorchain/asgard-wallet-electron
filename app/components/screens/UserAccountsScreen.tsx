@@ -1,10 +1,12 @@
 import React, { useMemo, useCallback } from 'react';
+import { WALLET } from '../../index'
 // import { useTracker } from 'meteor/react-meteor-data';
 // import { UserAccount } from '/imports/api/collections/client_collections'
 // import { UserAccountTypes } from '/imports/api/collections/userAccountCollection';
 
 // import { WALLET } from '/imports/startup/client/init'
 import { Row, Col, Typography, Button, Divider, Card, List } from 'antd';
+import { useHistory } from 'react-router';
 const { Title, Text, Paragraph } = Typography
 
 const userRecord = {
@@ -19,6 +21,7 @@ const userRecord = {
 type ClientTypes = {network: string, chainId: string}
 const UserAccountsScreen: React.FC = (): JSX.Element => {
   // TODO: Make reactive when we handle connection errors
+  let history = useHistory()
   const client: ClientTypes = useMemo(() => {
     let obj
     try {
@@ -48,6 +51,7 @@ const UserAccountsScreen: React.FC = (): JSX.Element => {
     try {
       // await WALLET.lock()
       // FlowRouter.go('walletUnlock')
+      history.push('/wallet-unlock')
     } catch (error) {
       console.log(error)
     }
@@ -55,8 +59,9 @@ const UserAccountsScreen: React.FC = (): JSX.Element => {
   const removeWallet = useCallback(async () => { 
     console.log('removing wallet soon...')
     try {
-      // await WALLET.resetWallet()
+      await WALLET.resetWallet()
       // FlowRouter.go('walletStart') 
+      history.push('/')
     } catch (error) {
       console.log(error)
     }
@@ -77,7 +82,7 @@ const UserAccountsScreen: React.FC = (): JSX.Element => {
                   <div role="tab" aria-disabled="false" aria-selected="false" tabIndex={-1} className="ant-tabs-tab-active ant-tabs-tab" id="tab-mainnet" aria-controls="tabpane-mainnet">
                     Mainnet
                   </div>
-                  <div className="ant-tabs-ink-bar ant-tabs-ink-bar-animated" style={{display:"block", transform: "translate3d(0px, 0px, 0px)", width: "87px;"}}></div>
+                  <div className="ant-tabs-ink-bar ant-tabs-ink-bar-animated" style={{display:"block", transform: "translate3d(0px, 0px, 0px)", width: "87px"}}></div>
               </div>
             </div>
           </div>

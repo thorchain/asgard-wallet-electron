@@ -1,34 +1,36 @@
 import { BaseService } from './baseService';
 
-export class AssetService extends BaseService {
+export class TokenService extends BaseService {
   constructor() {
       super();
       console.log('constructing assets service...')
-      this.tableName = "Assets";
+      this.tableName = "Tokens";
   }
 
   async findAll() {
-    console.log('attempting to find all assets')
+    console.log('attempting to find all tokens')
       return await this.connection.select({
           from: this.tableName,
       })
   }
 
-  async insert(txs) {
+  async insert(vals) {
       return await this.connection.insert({
           into: this.tableName,
-          values: txs,
+          values: vals,
           return: true // since studentid is autoincrement field and we need id, 
           // so we are making return true which will return the whole data inserted.
       })
   }
 
   async findOne(opts) {
-    const query = {}
-    if (opts) { query.where = opts}
-    query.from = this.tableName
-    const res =  await this.connection.select(query)
-    return res && res[res.length -1]
+    const res = await this.connection.select({
+        from: this.tableName,
+        where: {
+          opts
+        }
+    }) 
+    return res && res[0]
   }
 
   async removeOne(id) {
@@ -43,12 +45,6 @@ export class AssetService extends BaseService {
     return await this.connection.clear(this.tableName)
   }
 
-  async update(opts) {
-    return await this.connection.update({
-      in: this.tableName,
-      opts
-    })
-  }
   async updateOne(id, updateData) {
       return await this.connection.update({ in: this.tableName,
           set: updateData,
@@ -59,3 +55,4 @@ export class AssetService extends BaseService {
   }
 
 }
+

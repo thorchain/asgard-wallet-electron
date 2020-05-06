@@ -7,29 +7,63 @@ export class TransactionService extends BaseService {
       this.tableName = "Transactions";
   }
 
-  findAll() {
+  async findAll() {
       console.log('trying to get transactions')
-      return this.connection.select({
+      return await this.connection.select({
           from: this.tableName,
       })
   }
+  async findLastTx() {
+      return await this.connection.select({
+          from: this.tableName,
+          where: {
+              pending: !true
+          },
+          order: {
+            by: timeStamp,
+            type: 'desc'
+          },
+          limit: 1
+      })
+  }
+  async find(opts) {
+      return await this.connection.select({
+          from: this.tableName,
+          where: opts,
+      })
+  }
 
-  insert(txs) {
-      return this.connection.insert({
+  async insert(txs) {
+      return await this.connection.insert({
           into: this.tableName,
           values: txs,
           return: true // since studentid is autoincrement field and we need id, 
           // so we are making return true which will return the whole data inserted.
       })
   }
+  async upsert(vals) {
+      return await this.connection.insert({
+          into: this.tableName,
+          values: vals,
+          upsert: true,
+          return: true // since studentid is autoincrement field and we need id, 
+          // so we are making return true which will return the whole data inserted.
+      })
+  }
 
-  findOne(id) {
-      return this.connection.select({
+  async findOne(id) {
+      return await this.connection.select({
           from: this.tableName,
           where: {
               id: id
           }
       })
+  }
+  async remove (opts) {
+    return await this.connection.remove({
+        from: this.tableName,
+        where: opts
+    })
   }
 
   removeOne(id) {
@@ -41,9 +75,7 @@ export class TransactionService extends BaseService {
       })
   }
   removeAll() {
-      return this.connection.remove({
-          from: this.tableName
-      })
+    return this.connection.clear(this.tableName)
   }
 
   updateOne(id, updateData) {

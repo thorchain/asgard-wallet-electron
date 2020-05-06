@@ -1,14 +1,14 @@
 import * as JsStore from 'jsstore';
-import { TransactionTable, AssetTable } from './tables'
+import { TransactionTable, AssetTable, TokenTable, AccountTable } from './tables'
 
 const workerPath = 'node_modules/jsstore/dist/jsstore.worker.js';
 export const idbCon = new JsStore.Connection(new Worker(workerPath));
-export const dbname = 'wallet_store4';
+export const dbname = 'wallet_store';
 
 const getDatabase = () => {
     const dataBase = {
         name: dbname,
-        tables: [TransactionTable, AssetTable]
+        tables: [TransactionTable, AssetTable, TokenTable, AccountTable]
     };
     return dataBase;
 };

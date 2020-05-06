@@ -1,7 +1,10 @@
 import { EventEmitter } from "events";
 // import { UserAccount, UserAssets, UserTransactions, TokenData, MarketData } from '/imports/api/collections/client_collections'
-import { TransactionService } from '../api/WalletController/storage/transactionsService'
-import Binance from "./binance";
+import { TransactionService } from './storage/transactionsService';
+import { AssetService } from './storage/assetsService';
+import { AccountService } from './storage/accountsService';
+import { TokenService } from "./storage/tokensService";
+import Binance from '../binance';
 import { crypto } from '@binance-chain/javascript-sdk'
 export const BNB = new Binance();
 const bcrypt = require('bcryptjs');
@@ -15,28 +18,39 @@ export default class WalletController extends EventEmitter{
     let connected = navigator.onLine || false
     this.getConnected = function () { return connected }
     this.setConnected = function (v) { connected = v === true ? true : false }
+    this.UserAccount = new AccountService()
+    this.UserAssets = new AssetService()
+    this.UserTransactions = new TransactionService()
+    this.TokenData = new TokenService()
   }
-  isUnlocked () { return this.getIsUnlocked() }
+  // isUnlocked () { return this.getIsUnlocked() }
 
-  generateUserAuth = async (pw) => {
-    const user = UserAccount.findOne()
+  async generateUserAuth (pw) {
+    console.log("calling to generate user auth")
+    const user = await this.UserAccount.findOne()
+    console.log('do we have the user account?')
+    console.log(user)
     if (user) {
+      
       // SECURITY: Using bcrypt for now. Confirm needed upgrade to argon2? (issues in client?)
       // The UserAccount collection should never need be synced with a server
-      user.pwHash = bcrypt.hashSync(pw, 8)
-      UserAccount.update({_id:user._id},{$set: user})
+      const pwHash = bcrypt.hashSync(pw, 8)
+      const res = await this.UserAccount.updateOne(user._id,{pwHash:pwHash})
+      console.log('updated user?')
+      // console.log(user[0])
+      // console.log(res)
     } else {
       throw Error('Unable to intialize account auth')
     }
     
   }
 
-  checkUserAuth = async (pw) => {
-    const user = UserAccount.findOne()
+  async checkUserAuth (pw) {
+    const user = await this.UserAccount.findOne()
     return bcrypt.compareSync(pw, user.pwHash)
   }
 
-  getTxsFrom = async (start, address) => {
+  async getTxsFrom (start, address) {
     // https://docs.binance.org/api-reference/dex-api/paths.html#apiv1transactions
     // 60 queries/min, 3 month max date window, default last 24 hrs
     // https://www.epochconverter.com/
@@ -62,17 +76,19 @@ export default class WalletController extends EventEmitter{
   }
 
 
-  initializeTransactionData = async (address) => {
+  async initializeTransactionData (address) {
     console.log("initializing transaction data...");
+    // Testnet genesis
     const genesis = 1555545600000 // TODO: change per chain (test/main etc.)
     const transactions = await this.getTxsFrom(genesis, address)
-    return UserTransactions.batchInsert(transactions)
+    return await this.UserTransactions.insert(transactions)
   }
 
-  updateTransactionData = async () => {
+  async updateTransactionData () {
     console.log("updating transactions...");
-    const address = UserAccount.findOne().address
-    const lastTx = UserTransactions.find({pending: {$ne:true}},{sort: {timeStamp: -1}, limit: 1}).fetch()
+    const address = await this.UserAccount.findOne().address
+    // const lastTx = UserTransactions.find({pending: {$ne:true}},{sort: {timeStamp: -1}, limit: 1}).fetch()
+    const lastTx = await this.UserTransactions.findLastTx()
     let epoch, d, transactions
 
     if (lastTx[0]) {
@@ -87,28 +103,29 @@ export default class WalletController extends EventEmitter{
       return e.txHash
     })
 
-    const duplicates = UserTransactions.find({txHash:{$in:txHashes}}).fetch()
+    // const duplicates = UserTransactions.find({txHash:{$in:txHashes}}).fetch()
+    const duplicates = await this.UserTransactions.find({txHash:{in:txHashes}})
     if (duplicates.length > 0) {
       console.log('handling duplicates')
       for (let i = 0; i < duplicates.length; i++) {
         const e = duplicates[i]
-        const result = UserTransactions.remove({txHash:e.txHash})
+        const result = await this.UserTransactions.remove({txHash:e.txHash})
       }
     } 
     
     if (txs.length > 0) {
-      return UserTransactions.batchInsert(txs)
+      return await this.UserTransactions.insert(txs)
     } else {
       return []
     }
       
   }
 
-  getClient = () => {
+  getClient () {
     return BNB.bnbClient
   }
 
-  getTokenData = async (assets) => {
+  async getTokenData (assets) {
     if (assets && assets.length > 0) {
       
       const symbols = assets.map(asset => {
@@ -153,22 +170,25 @@ export default class WalletController extends EventEmitter{
     }
   }
 
-  initializeTokenData = async() => {
+  async initializeTokenData () {
     console.log("initializing token data...");
-    const usr = await UserAccount.findOne()
-    if (usr && usr.assets && usr.assets.length > 0) {
-      const tokens = await this.getTokenData(usr.assets)
-      TokenData.remove({})
-      TokenData.batchInsert(tokens)
-    }
+    const usr = await this.UserAccount.findOne()
+    const assets = await this.UserAssets.findAll()
+    console.log(usr)
+    // if (usr && usr.assets && usr.assets.length > 0) {
+      console.log('we needed the stupid assets?')
+      const tokens = await this.getTokenData(assets)
+      await this.TokenData.removeAll()
+      await this.TokenData.insert(tokens)
+    // }
   }
-  updateTokenData = async () => {
+  async updateTokenData () {
     console.log('updating token data...')
     // This is better than a sync, since we don't have
     // `updateMultiple` for mongo on the client.
     await this.initializeTokenData()
   }
-  watchTxsLoop = async () => {
+  watchTxsLoop () {
     // IF this is running, just extend it to a max amount
     // track as member to class
     if (this.txTicks) {
@@ -189,7 +209,7 @@ export default class WalletController extends EventEmitter{
     }
   }
 
-  initializeConn = async (address, network) => {
+  initializeConn (address, network) {
     console.log("initializing sockets...");
     try {
       // todo: do we need to use '/stream' ?
@@ -232,7 +252,7 @@ export default class WalletController extends EventEmitter{
     }
 
   }
-  connHandleTransferMessage = async (data) => {
+  async connHandleTransferMessage (data) {
     const time = new Date(Date.now()).toISOString()
     if (data.data) {
 
@@ -248,10 +268,11 @@ export default class WalletController extends EventEmitter{
         timeStamp: time,
         pending: true
       }
-      return UserTransactions.upsert({txHash:tx.txHash},tx)
+      await this.UserTransactions.remove({txHash:tx.txHash})
+      return await this.UserTransactions.insert([tx])
     }
   }
-  connHandleAccountMessage = async (data) => {
+  async connHandleAccountMessage (data) {
       const balances = data.data.B
       const assets = balances.map(function(elem) {
         // these are the new balances
@@ -265,25 +286,26 @@ export default class WalletController extends EventEmitter{
         asset.shortSymbol = asset.symbol.split("-")[0].substr(0,4)
         return asset
       })
-      const account = UserAccount.findOne();
+      const account = await this.UserAccount.findOne();
       if (assets.length !== account.assets.length) {
         // Check to only add new tokens
         const newTokens = await this.getTokenData(assets) // is this potentially bug?
-        const oldTokens = await TokenData.find().fetch()
+        const oldTokens = await this.TokenData.findAll()
         const addTokens = newTokens.filter(e => {
           return !(oldTokens.find(f => {return e.symbol === f.symbol}))
         })
-        TokenData.batchInsert(addTokens)
+        // TokenData.batchInsert(addTokens)
+        TokenData.insert(addTokens)
       }
-      UserAccount.update({_id: account._id}, {$set: {assets: assets}})
+      // UserAccount.update({_id: account._id}, {$set: {assets: assets}})
       this.updateUserAssetsStore(assets)
 
   }
 
-  updateUserAssetsStore = (assets) => {
+  async updateUserAssetsStore (assets) {
     console.log("updating user assets...");
     // we need to find the assets that changed
-    const oldAssets = UserAssets.find().fetch()
+    const oldAssets = await this.UserAssets.findAll()
     const changed = assets.filter((asset) => {
       // get current balances
       const existingAsset = oldAssets.find(e => {return asset.symbol === e.symbol})
@@ -299,46 +321,45 @@ export default class WalletController extends EventEmitter{
     // Account for swaps etc. with potentially 2 or more changes
     for (let index = 0; index < changed.length; index++) {
       const element = changed[index];
-      UserAssets.update({symbol:element.symbol},{$set: element},{upsert: true})
+      // UserAssets.update({symbol:element.symbol},{$set: element},{upsert: true})
+      await this.UserAssets.update({where:{symbol:element.symbol},set: element})
       
     }
     
   }
 
-  initializeUserAccount = async (account) => {
+  async initializeUserAccount (account) {
     console.log("initializing user account data...");
-    
-    await BNB.getBalances(account.address).then(e => {
+    let assets = []
+    await BNB.getBalances(account.address).then(async (e) => {
       if (e.length > 0) {
-        
-        account.assets = e.map(function(elem) {
+        assets = e.map(function(elem) {
           elem.shortSymbol = elem.symbol.split("-")[0].substr(0,4)
           elem.free = parseFloat(elem.free)
           elem.frozen = parseFloat(elem.frozen)
           elem.locked = parseFloat(elem.locked)
           return elem
         })
-        
-      } else {
-        account.assets = []
       }
       
-      UserAccount.remove({})
-      UserAccount.insert(account)
-      UserAssets.remove({})
-      UserAssets.batchInsert(account.assets)
+      console.log('initializing the user account...')
+      console.log(account)
+      // await this.UserAccount.removeAll()
+      await this.UserAccount.insert([account])
+      // await this.UserAssets.removeAll()
+      await this.UserAssets.insert(assets)
     })
 
   }
 
-  initializeVault = (keystore) => {
+  initializeVault (keystore) {
     console.log("initializing vault...")
     window.localStorage.setItem("binance", JSON.stringify(keystore));
   }
 
 
-  generateAccount = async (pw, mnemonic) => {
-    console.log("generateing keystore...");
+  async generateAccount (pw, mnemonic) {
+    console.log("generating keystore...");
     
     let account
     if (mnemonic) {
@@ -359,13 +380,13 @@ export default class WalletController extends EventEmitter{
     return account
   }
 
-  generateAccountFromKeystore = async (pw, keystore) => {
+  async generateAccountFromKeystore (pw, keystore) {
     const account = await BNB.bnbClient.recoverAccountFromKeystore(keystore, pw)
     delete account.privateKey // SECURITY: imperative
     return account
   }
 
-  generateNewWallet = async (pw, mnemonic, keystore, network) => {
+  async generateNewWallet (pw, mnemonic, keystore, network) {
     return new Promise(async (resolve, reject) => {
       // do a thing, possibly async, then…
       // TODO: below, refactor to store agnostic method call adapter
@@ -378,28 +399,33 @@ export default class WalletController extends EventEmitter{
       } else {
         
         try {
-          if (network) { 
-            await BNB.setNetwork(network)
-          } else {
-            // We default to testnet for now
-            await BNB.setNetwork('testnet')
-          }
-          
+          if (!network) { network = 'testnet' }
+          await BNB.setNetwork(network)
+          console.log('set network on binance client...') 
           if (keystore) {
             account = await this.generateAccountFromKeystore(pw, keystore)
-            account.keystore = keystore
+            // account.keystore = keystore
           } else {
             account = await this.generateAccount(pw, mnemonic)
+            console.log('we generated the account...!!!')
+            console.log(account)
           }
 
           // Sequnce is arbitrary and necessary
           await this.initializeVault(account.keystore)
+          delete account.keystore
+          console.log('success on initialize vault')
+          console.log(account)
           await this.initializeUserAccount(account)
+          console.log('success on initialize useraccount')
           await this.generateUserAuth(pw)
+          console.log('success on generate auth')
           
           // above ^ required prior to below 
           await this.initializeTokenData(account)
+          console.log('success on initialize token data')
           await this.initializeTransactionData(account.address)
+          console.log('success on initialize transaction data')
           // Binance network websocket
           await this.initializeConn(account.address, network)
           //
@@ -417,33 +443,33 @@ export default class WalletController extends EventEmitter{
   }
 
 
-  lock = () => {
+  async lock () {
     if (this.getIsUnlocked() === true) {
       this.conn.close()
     }
-    const account = UserAccount.findOne()
+    const account = await this.UserAccount.findOne()
     if (account && account._id) {
-      UserAccount.update({_id:account._id},{$set: {locked: true}})
+      await this.UserAccount.update({where:{id:account.id},set: {locked: true}})
     }
     this.setIsUnlocked(false)
     return true
   }
-  unlock = async (pw) => {
+  async unlock (pw) {
     // intended only for just created wallets, no sync, no init conn
     // DO NOT USE FOR login or new app instance... use below
     const check = await this.checkUserAuth(pw)
     if (check) {
       // await BNB.initializeClient() // pubkey only?
       this.setIsUnlocked(true) // SECURITY: leave last
-      const account = UserAccount.findOne()
-      UserAccount.update({_id:account._id},{$set: {locked: false}})
+      const account = await this.UserAccount.findOne()
+      await this.UserAccount.update({where:{id:account.id},set: {locked: false}})
     } else {
       
       throw Error("Incorrect password")
     }
   }
-  unlockAndSync = async (pw) => {
-    const account = UserAccount.findOne()
+  async unlockAndSync (pw) {
+    const account = await this.UserAccount.findOne()
     if (await this.checkUserAuth(pw)) {
       try {
         const network = account.address.charAt(0) === 't' ? 'testnet' : 'mainnet'
@@ -451,7 +477,7 @@ export default class WalletController extends EventEmitter{
         await this.initializeConn(account.address, network) // this should fail gracefully for offline use
         await this.syncUserData()
         this.setIsUnlocked(true) // SECURITY: leave last of internal methods
-        UserAccount.update({_id:account._id},{$set: {locked: false}})
+        await this.UserAccount.update({where:{_id:account._id},set: {locked: false}})
         
       } catch (error) {
         throw Error(error)
@@ -463,7 +489,7 @@ export default class WalletController extends EventEmitter{
 
   }
 
-  syncUserData = async () => {
+  async syncUserData () {
     // This can be called after unlock
     await this.updateUserBalances()
     await this.updateTransactionData()
@@ -472,10 +498,10 @@ export default class WalletController extends EventEmitter{
     // TODO: update market data
   }
 
-  updateUserBalances = async () => {
-    const user = UserAccount.findOne()
+  async updateUserBalances () {
+    const user = await this.UserAccount.findOne({id:0})
     let balances = {}
-    await BNB.getBalances(user.address).then(e => {
+    await BNB.getBalances(user.address).then(async (e) => {
       balances = e.map(function(elem) {
         elem.shortSymbol = elem.symbol.split("-")[0].substr(0,4)
         elem.free = parseFloat(elem.free)
@@ -485,39 +511,47 @@ export default class WalletController extends EventEmitter{
       })
       
       if (balances.length > 0) {
-        const doc = UserAccount.findOne();
-        UserAccount.update({_id:doc._id}, {$set: {assets: balances}})
-        this.updateUserAssetsStore(balances)
+        // const doc = UserAccount.findOne();
+        await this.UserAccount.update({where:{id:user.id}, set: {assets: balances}})
+        await this.updateUserAssetsStore(balances)
       }
     }).catch(e => {
       console.log(e)
     })
   }
   
-  resetWallet = async () => {
+  async resetWallet () {
     // SECURITY: This is descrutive removal of all user account data and keystores
     // TODO: Add a second 'confirmResetWallet()' method ?
+    console.log('error first off?')
     try {
       this.lock() // this is to flag for app security
-      await UserAccount.remove({})
-      await UserTransactions.remove({})
-      await TokenData.remove({})
-      await MarketData.remove({})
+      console.log('removing user data...')
+      await this.UserAccount.removeAll()
+      console.log('removed user account!')
+      await this.UserTransactions.removeAll()
+      console.log('removed user transactions!')
+      await this.TokenData.removeAll()
+      console.log('removed token data!')
+      await this.UserAssets.removeAll()
+      console.log('removed asset data!')
+      // await MarketData.remove({})
       await window.localStorage.removeItem("binance"); // vault
-      await localforage.clear(); // persistant store
+      console.log('removed vault!')
+      // await localforage.clear(); // persistant store
       return true
     } catch (error) {
-      throw Error(error)
+      throw Error(error.message)
     }
   }
 
-  transferFunds = async (sender, recipient, amount, asset, password) => {
-    const userAccount = UserAccount.findOne()
+  async transferFunds (sender, recipient, amount, asset, password) {
+    const userAccount = await this.UserAccount.findOne()
 
     try {
       let keystore = window.localStorage.getItem("binance")
       
-      let privateKey = BNB.sdk.crypto.getPrivateKeyFromKeyStore(keystore, password)
+      let privateKey = await BNB.sdk.crypto.getPrivateKeyFromKeyStore(keystore, password)
       password = null // SECURITY: unset
       await BNB.bnbClient.setPrivateKey(privateKey, true)
       privateKey = null // SECURITY: unset
@@ -555,8 +589,8 @@ export default class WalletController extends EventEmitter{
 
   }
 
-  vaultFreezeFunds = async (amount, asset, password) => {
-    const userAccount = UserAccount.findOne()
+  async vaultFreezeFunds (amount, asset, password) {
+    const userAccount = await this.UserAccount.findOne()
     try {
       const privateKey = await crypto.getPrivateKeyFromKeyStore( userAccount.keystore, password)
       await BNB.bnbClient.setPrivateKey(privateKey)
@@ -588,8 +622,8 @@ export default class WalletController extends EventEmitter{
     }
 
   }
-  vaultUnfreezeFunds = async (amount, asset, password) => {
-    const userAccount = UserAccount.findOne()
+  async vaultUnfreezeFunds (amount, asset, password) {
+    const userAccount = await this.UserAccount.findOne()
     try {
       const privateKey = await crypto.getPrivateKeyFromKeyStore( userAccount.keystore, password)
       await BNB.bnbClient.setPrivateKey(privateKey)

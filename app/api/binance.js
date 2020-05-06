@@ -28,7 +28,7 @@ class Binance {
     this.baseURL = networks.testnet.baseURL
     this.explorerBaseURL = networks.testnet.explorerBaseURL
   }
-  setNetwork = async (network) => {
+  async setNetwork (network) {
     if (networks[network]) {
       this.net = networks[network]
       this.baseURL = this.net.baseURL
@@ -46,13 +46,13 @@ class Binance {
     }
   }
 
-  useLedgerSigningDelegate = (
+  useLedgerSigningDelegate (
     ledgerApp,
     preSignCb,
     postSignCb,
     errCb,
     hdPath,
-  ) => {
+  ) {
     return this.bnbClient.useLedgerSigningDelegate(
       ledgerApp,
       preSignCb,
@@ -62,30 +62,30 @@ class Binance {
     );
   };
 
-  clearPrivateKey = () => {
+  clearPrivateKey () {
     this.bnbClient.privateKey = null;
   };
 
-  getBinanceUrl = () => {
+  getBinanceUrl () {
     return this.baseURL;
   };
 
-  getPrefix = () => {
+  getPrefix () {
     return this.net.name === 'testnet' ? 'tbnb' : 'bnb';
   };
 
-  isValidAddress = address => {
+  isValidAddress (address) {
     return bnbClient.crypto.checkAddress(address, this.getPrefix());
   };
 
-  txURL = tx => {
+  txURL (tx) {
     return this.explorerBaseURL + '/tx/' + tx;
   };
 
-  fees = () => {
+  fees () {
     return this.httpClient.get('/fees');
   };
-  getFee = async (txType) => {
+  async getFee (txType) {
     try {
 
       const res = await this.fees()
@@ -98,7 +98,7 @@ class Binance {
     }
   }
 
-  getTokens = (options) => {
+  getTokens (options) {
     let query = "/tokens"
     if (options && options.limit) {
       query += "?limit=" + options.limit
@@ -108,12 +108,12 @@ class Binance {
     }
     return this.httpClient.get(query);
   }
-  getTokenInfo = (symbol) => {
+  getTokenInfo (symbol) {
     const query = "/tokens?token=" + symbol
     return this.httpClient.get(query)
   }
 
-  setMarketRates = async symbols => {
+  async setMarketRates (symbols) {
     const bnb = await axios.get(
       'https://api.cryptonator.com/api/ticker/bnb-usd',
     );
@@ -179,15 +179,15 @@ class Binance {
   };
 
   // convert fee number into BNB tokens
-  calculateFee = x => {
+  calculateFee (x) {
     return x / 100000000;
   };
 
-  getBalances = address => {
+  getBalances (address) {
     return this.bnbClient.getBalance(address);
   };
 
-  getTransactions = (address, options) => {
+  getTransactions (address, options) {
     let query = '/transactions?address=' + address
     // TODO: Valid options not checked yet
     if (options) {
@@ -201,20 +201,20 @@ class Binance {
     return this.httpClient.get(query)
   }
 
-  getAccount = address => {
+  getAccount (address) {
     return this.bnbClient.getAccount(address);
   };
 
-  getMarkets = (limit = 1000, offset = 0) => {
+  getMarkets (limit = 1000, offset = 0) {
     return this.bnbClient.getMarkets(limit, offset);
   };
 
-  multiSend = async (address, transactions, memo = '') => {
+  async multiSend (address, transactions, memo = '') {
     const result = await this.bnbClient.multiSend(address, transactions, memo);
     return result;
   };
 
-  transfer = async (fromAddress, toAddress, amount, asset, memo = '') => {
+  async transfer (fromAddress, toAddress, amount, asset, memo = '') {
     const result = await this.bnbClient.transfer(
       fromAddress,
       toAddress,
